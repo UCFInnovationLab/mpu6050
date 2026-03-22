@@ -52,7 +52,7 @@ THE SOFTWARE.
  * @see MPU6050_ADDRESS_AD0_LOW
  * @see MPU6050_ADDRESS_AD0_HIGH
  */
-MPU6050_Base::MPU6050_Base(uint8_t address, void *wireObj):devAddr(address), wireObj(wireObj) {
+MPU6050_Base::MPU6050_Base(uint8_t address, void *wireObj):devAddr(address), wireObj(wireObj), fifoTimeout(MPU6050_FIFO_DEFAULT_TIMEOUT) {
 }
 
 /** Power on and prepare for general usage.
@@ -88,19 +88,19 @@ void MPU6050_Base::initialize(ACCEL_FS accelRange, GYRO_FS gyroRange) {
 
     switch (accelRange) 
     {
-    case ACCEL_FS::A2G:
+    case A2G:
         setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
 	break;
 
-    case ACCEL_FS::A4G:
+    case A4G:
         setFullScaleAccelRange(MPU6050_ACCEL_FS_4);
 	break;
 
-    case ACCEL_FS::A8G:
+    case A8G:
         setFullScaleAccelRange(MPU6050_ACCEL_FS_8);
 	break;
 
-    case ACCEL_FS::A16G:
+    case A16G:
         setFullScaleAccelRange(MPU6050_ACCEL_FS_16);
 	break;
     default:
@@ -110,19 +110,19 @@ void MPU6050_Base::initialize(ACCEL_FS accelRange, GYRO_FS gyroRange) {
 
     switch (gyroRange) 
     {
-    case GYRO_FS::G250DPS:
+    case G250DPS:
         setFullScaleGyroRange(MPU6050_GYRO_FS_250);
 	break;
 
-    case GYRO_FS::G500DPS:
+    case G500DPS:
         setFullScaleGyroRange(MPU6050_GYRO_FS_500);
 	break;
 
-    case GYRO_FS::G1000DPS:
+    case G1000DPS:
         setFullScaleGyroRange(MPU6050_GYRO_FS_1000);
 	break;
 
-    case GYRO_FS::G2000DPS:
+    case G2000DPS:
         setFullScaleGyroRange(MPU6050_GYRO_FS_2000);
 	break;
     default:
@@ -3334,7 +3334,7 @@ bool MPU6050_Base::writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSi
             Serial.print(", length=");
             Serial.println(length);*/
             if (useProgMem) {
-                if (sizeof(progBuffer) < length) progBuffer = (uint8_t *)realloc(progBuffer, length);
+                if (sizeof(progBuffer) < length) { free(progBuffer); progBuffer = (uint8_t *)malloc(length); }
                 for (j = 0; j < length; j++) progBuffer[j] = pgm_read_byte(data + i + j);
             } else {
                 progBuffer = (uint8_t *)data + i;

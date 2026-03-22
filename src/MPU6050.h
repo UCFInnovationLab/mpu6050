@@ -433,18 +433,18 @@ THE SOFTWARE.
 
 #define MPU6050_DMP_MEMORY_BANKS        8
 #define MPU6050_DMP_MEMORY_BANK_SIZE    256
-#define MPU6050_DMP_MEMORY_CHUNK_SIZE   16
+#define MPU6050_DMP_MEMORY_CHUNK_SIZE   8
 
 #define MPU6050_FIFO_DEFAULT_TIMEOUT 11000
 
-enum class ACCEL_FS {
+enum ACCEL_FS {
     A2G,
     A4G,
     A8G,
     A16G
 };
 
-enum class GYRO_FS {
+enum GYRO_FS {
     G250DPS,
     G500DPS,
     G1000DPS,
@@ -857,7 +857,7 @@ class MPU6050_Base {
         uint8_t devAddr;
         void *wireObj;
         uint8_t buffer[14];
-        uint32_t fifoTimeout = MPU6050_FIFO_DEFAULT_TIMEOUT;
+        uint32_t fifoTimeout;
 
         float accelerationResolution;
         float gyroscopeResolution;

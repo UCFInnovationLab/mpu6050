@@ -288,7 +288,7 @@ uint8_t MPU6050_6Axis_MotionApps20::dmpInitialize() {
 	// reset device
 	DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
 	reset();
-	delay(30); // wait after reset
+	delay(100); // wait after reset (datasheet specifies ~50ms; 100ms provides margin)
 
 	// enable sleep mode and wake cycle
 	/*Serial.println(F("Enabling sleep mode..."));
